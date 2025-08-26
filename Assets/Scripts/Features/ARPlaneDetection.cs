@@ -1,44 +1,52 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
+using Logger = Core.Logger;
 
-[RequireComponent(typeof(ARPlaneManager))]
-public class ARPlaneDetection : MonoBehaviour
+namespace Features
 {
-    [SerializeField]
-    private bool showPlaneTrackableLog = true;
-
-    private ARPlaneManager planeManager;
-
-    private void Awake()
+    [RequireComponent(typeof(ARPlaneManager))]
+    public class ARPlaneDetection : MonoBehaviour
     {
-        planeManager = GetComponent<ARPlaneManager>();
-    }
+        
+        private ARPlaneManager planeManager;
 
-    private void OnEnable()
-    {
-        planeManager.planesChanged += PlanesChanged;    
-    }
-
-    private void OnDisable()
-    {
-        planeManager.planesChanged -= PlanesChanged;
-    }
-
-    private void PlanesChanged(ARPlanesChangedEventArgs obj)
-    {
-        DisplayPlanesChanged("Plane Added", obj.added);
-        DisplayPlanesChanged("Plane Updated", obj.updated);
-        DisplayPlanesChanged("Plane Removed", obj.removed);
-    }
-
-    private void DisplayPlanesChanged(string action, IEnumerable<ARPlane> planes)
-    {
-        if (!showPlaneTrackableLog) return;
-
-        foreach (ARPlane plane in planes)
+        private void Awake()
         {
-            Logger.Instance.LogInfo($"{action}: AR Plane trackableId: {plane.trackableId}");
+            planeManager = GetComponent<ARPlaneManager>();
+        }
+
+        private void OnEnable()
+        {
+            planeManager.planesChanged += PlanesChanged;
+        }
+
+        private void OnDisable()
+        {
+            planeManager.planesChanged -= PlanesChanged;
+        }
+
+        private void PlanesChanged(ARPlanesChangedEventArgs obj)
+        {
+            DisplayPlanesChanged("added", obj.added);
+            DisplayPlanesChanged("updated", obj.updated);
+            DisplayPlanesChanged("removed", obj.removed);
+        }
+
+        private void DisplayPlanesChanged(string action, IEnumerable<ARPlane> planes)
+        {
+            foreach (ARPlane plane in planes)
+            {
+                Logger.Instance.LogInfo($"Plane {action}: ARPlane trackableId ({plane.trackableId})");
+            }
+        }
+        
+        void Start()
+        {
+        }
+
+        void Update()
+        {
         }
     }
 }
