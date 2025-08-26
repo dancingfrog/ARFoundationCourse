@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace DilmerGames.Core
+namespace Core
 {
     public class Logger : Singleton<Logger>
     {

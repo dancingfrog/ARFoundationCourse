@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
-using Logger = DilmerGames.Core.Logger;
+using Logger = Core.Logger;
 
 public class ARCapabilitiesManager : MonoBehaviour
 {
