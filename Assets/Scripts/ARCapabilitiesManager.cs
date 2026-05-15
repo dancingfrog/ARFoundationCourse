@@ -9,12 +9,14 @@ public class ARCapabilitiesManager : MonoBehaviour
     
     private void Awake()
     {
-        arSession = FindObjectOfType<ARSession>();
-        arSession.enabled = false;
+        arSession = FindFirstObjectByType<ARSession>();
+        if (arSession == null)
+            Debug.LogError("No ARSession found in scene");
+        else
+            arSession.enabled = false;
     }
     
-    // Start is called before first frame update
-    private void Start ()
+    private void Start()
     {
         StartCoroutine(CheckARSupport());
     }
@@ -24,22 +26,20 @@ public class ARCapabilitiesManager : MonoBehaviour
         if (ARSession.state == ARSessionState.None
             || ARSession.state == ARSessionState.CheckingAvailability)
         {
-            Logger.Instance.LogInfo("Checking if AR is available...");
+            Logger.Instance?.LogInfo("Checking if AR is available...");
             yield return ARSession.CheckAvailability();
         }
 
         if (ARSession.state != ARSessionState.Unsupported)
         {
-            Logger.Instance.LogInfo("This device supports AR sessions");
+            Logger.Instance?.LogInfo("This device supports AR sessions");
             arSession.enabled = true;
         }
         else
         {
-            Logger.Instance.LogInfo("This device does not support AR sessions");
+            Logger.Instance?.LogInfo("This device does not support AR sessions");
             arSession.enabled = false;
         }
-        
-        throw new System.NotImplementedException();
     }
 
     private void OnEnable() 
@@ -54,9 +54,8 @@ public class ARCapabilitiesManager : MonoBehaviour
     
     private void ARSessionStateChanged(ARSessionStateChangedEventArgs obj) 
     {
-        Logger.Instance.LogInfo($"AR session state changed: {obj.state}");
+        Logger.Instance?.LogInfo($"AR session state changed: {obj.state}");
     }
     
-    // Update is called once per frame; assume non-blocking (real-time)
     private void Update() {}
 }

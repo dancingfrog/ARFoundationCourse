@@ -100,3 +100,4 @@ InitTestScene*.unity*
 
 *.idea
 *.vscode
+unity_log.txt
